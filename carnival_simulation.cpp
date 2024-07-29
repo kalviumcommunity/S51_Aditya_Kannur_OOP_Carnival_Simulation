@@ -1,58 +1,87 @@
 #include <iostream>
 using namespace std;
 
-class Rides{
-    private:
+// Class Rides
+class Rides {
+
+// Member Variables
+private:
     string ride_name;
     double ride_duration;
     int ride_fare;
 
-    public:
-
-    Rides(string name, double duration, int fare){
+public:
+    // Constructor 
+    Rides(string name, double duration, int fare) {
         this->ride_name = name;
         this->ride_duration = duration;
         this->ride_fare = fare;
-    };
-
-    string getName(){
-        return this->ride_name;
     }
-    double getDuration(){
-        return this->ride_duration;
+        // : ride_name(name), ride_duration(duration), ride_fare(fare) {}
+        
+    string getName() const {
+        return ride_name;
+    }
+
+    double getDuration() const {
+        return ride_duration;
     }
 };
 
-class Stalls{
-    private:
+class Stalls {
+private:
     string stall_name;
     double stall_timer;
     int stall_fare;
 
-    public:
-
-    Stalls(string stall_name, double stall_timer, int stall_fare){
-        this->stall_name = stall_name;
-        this->stall_timer = stall_timer;
-        this->stall_fare = stall_fare;
-    };
-
-    string getName(){
-        return this->stall_name;
+public:
+    Stalls(string name, double timer, int fare) {
+        this->stall_name = name;
+        this->stall_timer = timer;
+        this->stall_fare = fare;
     }
-    double getTimer(){
-        return this->stall_timer;
+        // : stall_name(name), stall_timer(timer), stall_fare(fare) {}
+
+    string getName() const {
+        return stall_name;
+    }
+
+    double getTimer() const {
+        return stall_timer;
     }
 };
 
-int main(){
-    Rides roller_coster("roller-coster", 3, 300);
-    Stalls game_stall("shooting", 2, 200);
+void print_rides(const Rides rides[], int size) {
+    cout << "Rides " << endl;
+    for (int i = 0; i < size; i++) {
+        cout << "Ride name: " << rides[i].getName() << endl;
+        cout << "Ride duration: " << rides[i].getDuration() << " minutes" << endl;
+    }
+}
 
-    cout << "Ride name:" << " " << roller_coster.getName() << " " << endl;
-    cout << "Ride duration: " << " " << roller_coster.getDuration() << " " << endl;
-    cout << "stall name: " << " " << game_stall.getName() << " " << endl;
-    cout << "stall duration: " << " " << game_stall.getTimer();
+void print_stalls(const Stalls stalls[], int size) {
+    cout << "Stalls " << endl;
+    for (int i = 0; i < size; i++) {
+        cout << "Stall name: " << stalls[i].getName() << endl; 
+        cout << "Stall duration: " << stalls[i].getTimer() << " minutes" << endl; 
+    }
+}
 
-   return 0; 
+int main() {
+    Rides rides[] = {
+        Rides("roller-coaster", 3.0, 300),
+        Rides("bumper-cars", 5.0, 200),
+        Rides("ferris-wheel", 4.0, 400)
+    };
+
+    Stalls stalls[] = {
+        Stalls("shooting", 2.0, 200),
+        Stalls("ring-toss", 5.0, 100),
+        Stalls("basket-ball-shoot", 5.0, 100)
+    };
+
+    print_rides(rides, 3);
+    print_stalls(stalls, 3);
+
+    return 0;
 }
