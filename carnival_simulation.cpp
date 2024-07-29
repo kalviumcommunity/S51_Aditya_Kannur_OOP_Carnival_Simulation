@@ -46,13 +46,29 @@ class Stalls{
 };
 
 int main(){
-    Rides roller_coster("roller-coster", 3, 300);
-    Stalls game_stall("shooting", 2, 200);
 
-    cout << "Ride name:" << " " << roller_coster.getName() << " " << endl;
-    cout << "Ride duration: " << " " << roller_coster.getDuration() << " " << endl;
-    cout << "stall name: " << " " << game_stall.getName() << " " << endl;
-    cout << "stall duration: " << " " << game_stall.getTimer();
+    Rides rides[] = {
+        Rides("roller-coaster", 3.0, 300),
+        Rides("bumper-cars", 5.0, 200),
+        Rides("ferris-wheel", 4.0, 400)
+    };
+
+    Stalls stalls[] = {
+        Stalls("shooting", 2.0, 200),
+        Stalls("ring-toss", 5.0, 100),
+        Stalls("basket-ball-shoot", 5.0, 100)
+    };
+
+    int ride_arr_size = sizeof(rides) / sizeof(rides[0]);
+    int stall_arr_size = sizeof(stalls) / sizeof(stalls[0]);
+
+    for (int i=0; i<ride_arr_size; i++){
+        cout << "Rides " << rides[i].getName() << " -- "  << rides[i].getDuration() << " minutes " << endl;
+        // cout <<  << "minutes" << endl;
+    }
+    for(int i=0; i<stall_arr_size; i++){
+        cout << "Stalls " << stalls[i].getName() << " -- " << stalls[i].getTimer() << " minutes " << endl;
+    }
 
    return 0; 
 }
