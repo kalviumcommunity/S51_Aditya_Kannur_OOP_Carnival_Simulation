@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string> // Added this line
+#include <string> 
 using namespace std;
 
 // Class Rides
@@ -11,9 +11,15 @@ private:
     double ride_duration;
     int ride_fare;
 
+    int static totalRides;
+
 public:
     Rides(string name = "", double duration = 0.0, int fare = 0) 
-        : ride_name(name), ride_duration(duration), ride_fare(fare) {}
+        : ride_name(name), ride_duration(duration), ride_fare(fare) {
+            if (fare != 0){
+            totalRides ++;
+            }
+        }
 
     string getName() const {
         return ride_name;
@@ -21,6 +27,10 @@ public:
 
     double getDuration() const {
         return ride_duration;
+    }
+
+    static int getTotalRides() {
+        return totalRides;
     }
 };
 
@@ -41,6 +51,7 @@ public:
     double getTimer() const {
         return stall_timer;
     }
+
 };
 
 class Visitors {
@@ -49,9 +60,15 @@ private:
     int age;
     double height;
 
+    int static totalVisitors;
+
 public:
-    Visitors(string n = "", int a = 0, double h = 0.0) 
-        : name(n), age(a), height(h) {}
+     Visitors(string n = "", int a = 0, double h = 0.0) 
+        : name(n), age(a), height(h) {
+            if (a != 0){
+                totalVisitors++;
+            }
+    }
 
     string getName() const {
         return name;
@@ -64,6 +81,10 @@ public:
     double getHeight() const {
         return height;
     }
+
+    static int getTotalVisitors() {
+        return totalVisitors;
+    }
 };
 
 void print_stalls(const Stalls stalls[], int size) {
@@ -73,6 +94,9 @@ void print_stalls(const Stalls stalls[], int size) {
         cout << "Stall duration: " << stalls[i].getTimer() << " minutes" << endl; 
     }
 }
+
+int Visitors::totalVisitors = 0;
+int Rides::totalRides = 0;
 
 int main() {
     int numberOfRides, numberOfVisitors;
@@ -151,6 +175,8 @@ int main() {
     }
 
     print_stalls(stalls, 2);
+    cout << Visitors::getTotalVisitors()<<endl;
+    cout << Rides::getTotalRides()<<endl;
 
 
     // Deallocate dynamic memory
