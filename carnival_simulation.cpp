@@ -80,8 +80,20 @@ int main() {
     cout << "Enter number of Rides: ";
     cin >> numberOfRides;
 
+    // Error handling
+    if (numberOfRides <= 0) {
+        cerr << "Invalid number of rides. Exiting." << endl;
+        return 1;
+    }
+
     cout << "Enter number of Visitors: ";
     cin >> numberOfVisitors;
+
+    // Error Handling
+    if (numberOfVisitors <= 0) {
+        cerr << "Invalid number of visitors. Exiting." << endl;
+        return 1;
+    }
 
     Rides* rides = new Rides[numberOfRides];
     Visitors* visitors = new Visitors[numberOfVisitors];
