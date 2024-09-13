@@ -60,16 +60,17 @@ private:
     int age;
     double height;
 
-    int static totalVisitors;
+    static int totalVisitors;
 
 public:
-     Visitors(string n = "", int a = 0, double h = 0.0) 
+    Visitors(string n = "", int a = 0, double h = 0.0) 
         : name(n), age(a), height(h) {
             if (a != 0){
                 totalVisitors++;
             }
     }
 
+    // Accessor (getter) methods
     string getName() const {
         return name;
     }
@@ -84,6 +85,20 @@ public:
 
     static int getTotalVisitors() {
         return totalVisitors;
+    }
+
+    // Mutator (setter) methods
+    void setName(string n) {
+        name = n;
+    }
+
+    void setAge(int a) {
+        age = a;
+        totalVisitors++;
+    }
+
+    void setHeight(double h) {
+        height = h;
     }
 };
 
@@ -142,7 +157,7 @@ int main() {
         rides[i] = Rides(ride_name, ride_duration, ride_fare);
     }
 
-    for (int i = 0; i < numberOfVisitors; i++) {
+       for (int i = 0; i < numberOfVisitors; i++) {
         string name;
         int age;
         double height;
@@ -154,8 +169,12 @@ int main() {
         cout << "Visitor" << i+1 << " Height :";
         cin >> height;
 
-        visitors[i] = Visitors(name, age, height);
+        // Using mutators
+        visitors[i].setName(name);
+        visitors[i].setAge(age);
+        visitors[i].setHeight(height);
     }
+
 
     cout << endl;
 
@@ -175,6 +194,7 @@ int main() {
     }
 
     print_stalls(stalls, 2);
+    
     cout << Visitors::getTotalVisitors()<<endl;
     cout << Rides::getTotalRides()<<endl;
 
