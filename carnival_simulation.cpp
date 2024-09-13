@@ -5,36 +5,37 @@ using namespace std;
 // Class Rides
 class Rides {
 
-// Member Variables
 private:
-    string ride_name;
+    string ride_name;  
     double ride_duration;
     int ride_fare;
 
-    int static totalRides;
+    static int totalRides;
 
 public:
+    // Public constructor
     Rides(string name = "", double duration = 0.0, int fare = 0) 
         : ride_name(name), ride_duration(duration), ride_fare(fare) {
             if (fare != 0){
-            totalRides ++;
+                totalRides++;
             }
         }
 
     string getName() const {
-        return ride_name;
+        return ride_name;  // Provides access to the name without exposing how it's stored
     }
 
     double getDuration() const {
-        return ride_duration;
+        return ride_duration;  // Duration exposed via a method
     }
 
-    static int getTotalRides() {
+    static int getTotalRides() { 
         return totalRides;
     }
 };
 
 class Stalls {
+// Abstracted stall details
 private:
     string stall_name;
     double stall_timer;
@@ -44,19 +45,21 @@ public:
     Stalls(string name, double timer, int fare) 
         : stall_name(name), stall_timer(timer), stall_fare(fare) {}
 
+    // Exposing only necessary details to users via public accessors
     string getName() const {
-        return stall_name;
+        return stall_name;   // Provides the stall name but hides how it’s stored
     }
 
     double getTimer() const {
-        return stall_timer;
+        return stall_timer;  // Provides the duration of the stall
     }
-
 };
 
 class Visitors {
+
+// Private member variables
 private:
-    string name;
+    string name;  // Visitor details are hidden
     int age;
     double height;
 
@@ -70,24 +73,23 @@ public:
             }
     }
 
-    // Accessor (getter) methods
     string getName() const {
-        return name;
+        return name;  // Allows access to the visitor's name without exposing storage
     }
 
     int getAge() const {
-        return age;
+        return age;  // Allows access to the visitor's age
     }
 
     double getHeight() const {
-        return height;
+        return height;  // Allows access to the visitor's height
     }
 
     static int getTotalVisitors() {
         return totalVisitors;
     }
 
-    // Mutator (setter) methods
+    // Public mutator (setter) methods for controlled data modification
     void setName(string n) {
         name = n;
     }
@@ -157,7 +159,7 @@ int main() {
         rides[i] = Rides(ride_name, ride_duration, ride_fare);
     }
 
-       for (int i = 0; i < numberOfVisitors; i++) {
+    for (int i = 0; i < numberOfVisitors; i++) {
         string name;
         int age;
         double height;
@@ -169,25 +171,20 @@ int main() {
         cout << "Visitor" << i+1 << " Height :";
         cin >> height;
 
-        // Using mutators
+        // Using mutators for abstraction
         visitors[i].setName(name);
         visitors[i].setAge(age);
         visitors[i].setHeight(height);
     }
 
-
-    cout << endl;
-
-    cout << "Visitors" << endl;
+    cout << endl << "Visitors" << endl;
     for (int i = 0; i < numberOfVisitors; i++) {
         cout << "Visitor's Name: " << visitors[i].getName() << endl;
         cout << "Visitor's Age: " << visitors[i].getAge() << endl;
         cout << "Visitor's Height: " << visitors[i].getHeight() << endl;
     }
 
-    cout << endl;
-
-    cout << "Rides " << endl;
+    cout << endl << "Rides " << endl;
     for (int i = 0; i < numberOfRides; i++) {
         cout << "Ride name: " << rides[i].getName() << endl;
         cout << "Ride duration: " << rides[i].getDuration() << " minutes" << endl;
@@ -195,9 +192,8 @@ int main() {
 
     print_stalls(stalls, 2);
     
-    cout << Visitors::getTotalVisitors()<<endl;
-    cout << Rides::getTotalRides()<<endl;
-
+    cout << "Total Visitors: " << Visitors::getTotalVisitors() << endl;
+    cout << "Total Rides: " << Rides::getTotalRides() << endl;
 
     // Deallocate dynamic memory
     delete[] rides;
