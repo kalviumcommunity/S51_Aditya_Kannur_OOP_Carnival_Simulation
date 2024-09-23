@@ -72,6 +72,9 @@ public:
                 totalVisitors++;
             }
     }
+    ~Visitors(){
+        cout << "its destructured"
+    }
 
     string getName() const {
         return name;  // Allows access to the visitor's name without exposing storage
