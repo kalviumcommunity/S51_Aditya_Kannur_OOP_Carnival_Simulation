@@ -1,32 +1,42 @@
 #include <iostream>
-#include <string> 
+#include <string>
 using namespace std;
 
-// Class Rides
-class Rides {
-
-// Member Variables
-private:
-    string ride_name;
-    double ride_duration;
-    int ride_fare;
-
-    int static totalRides;
+// Base Class
+class Entertainment {
+protected:
+    string name;
+    double duration;
+    int fare;
 
 public:
-    Rides(string name = "", double duration = 0.0, int fare = 0) 
-        : ride_name(name), ride_duration(duration), ride_fare(fare) {
-            if (fare != 0){
-            totalRides ++;
-            }
-        }
+    Entertainment(string n = "", double d = 0.0, int f = 0)
+        : name(n), duration(d), fare(f) {}
 
     string getName() const {
-        return ride_name;
+        return name;
     }
 
     double getDuration() const {
-        return ride_duration;
+        return duration;
+    }
+
+    int getFare() const {
+        return fare;
+    }
+};
+
+// Derived Class 1: Hierarchical Inheritance
+class Rides : public Entertainment {
+private:
+    static int totalRides;
+
+public:
+    Rides(string n = "", double d = 0.0, int f = 0)
+        : Entertainment(n, d, f) {
+        if (f > 0) {
+            totalRides++;
+        }
     }
 
     static int getTotalRides() {
@@ -34,154 +44,118 @@ public:
     }
 };
 
-class Stalls {
-private:
-    string stall_name;
-    double stall_timer;
-    int stall_fare;
-
-public:
-    Stalls(string name, double timer, int fare) 
-        : stall_name(name), stall_timer(timer), stall_fare(fare) {}
-
-    string getName() const {
-        return stall_name;
-    }
-
-    double getTimer() const {
-        return stall_timer;
-    }
-
-};
-
-class Visitors {
-private:
-    string name;
-    int age;
-    double height;
-
-    int static totalVisitors;
-
-public:
-     Visitors(string n = "", int a = 0, double h = 0.0) 
-        : name(n), age(a), height(h) {
-            if (a != 0){
-                totalVisitors++;
-            }
-    }
-
-    string getName() const {
-        return name;
-    }
-
-    int getAge() const {
-        return age;
-    }
-
-    double getHeight() const {
-        return height;
-    }
-
-    static int getTotalVisitors() {
-        return totalVisitors;
-    }
-};
-
-void print_stalls(const Stalls stalls[], int size) {
-    cout << "Stalls " << endl;
-    for (int i = 0; i < size; i++) {
-        cout << "Stall name: " << stalls[i].getName() << endl; 
-        cout << "Stall duration: " << stalls[i].getTimer() << " minutes" << endl; 
-    }
-}
-
-int Visitors::totalVisitors = 0;
+// Static member initialization
 int Rides::totalRides = 0;
 
-int main() {
-    int numberOfRides, numberOfVisitors;
+// Derived Class 2: Hierarchical Inheritance
+class Stalls : public Entertainment {
+public:
+    Stalls(string n = "", double d = 0.0, int f = 0)
+        : Entertainment(n, d, f) {}
+};
 
+// Derived Class 3: Multi-Level Inheritance
+class PremiumRides : public Rides {
+private:
+    string additionalFeatures;
+
+public:
+    PremiumRides(string n = "", double d = 0.0, int f = 0, string features = "")
+        : Rides(n, d, f), additionalFeatures(features) {}
+
+    string getFeatures() const {
+        return additionalFeatures;
+    }
+};
+
+int main() {
+    int numberOfRides, numberOfStalls;
+
+    // Input for Rides
     cout << "Enter number of Rides: ";
     cin >> numberOfRides;
 
-    // Error handling
     if (numberOfRides <= 0) {
         cerr << "Invalid number of rides. Exiting." << endl;
         return 1;
     }
 
-    cout << "Enter number of Visitors: ";
-    cin >> numberOfVisitors;
-
-    // Error Handling
-    if (numberOfVisitors <= 0) {
-        cerr << "Invalid number of visitors. Exiting." << endl;
-        return 1;
-    }
-
     Rides* rides = new Rides[numberOfRides];
-    Visitors* visitors = new Visitors[numberOfVisitors];
-
-    Stalls stalls[] = {
-        Stalls("shooting", 2.0, 200),
-        Stalls("ring-toss", 5.0, 100)
-    };
 
     for (int i = 0; i < numberOfRides; i++) {
         string ride_name;
         double ride_duration;
         int ride_fare;
 
-        cout << "Ride" << i+1 << " Name :";
+        cout << "Ride " << i + 1 << " Name: ";
         cin >> ride_name;
-        cout << "Ride" << i+1 << " Duration :";
+        cout << "Ride " << i + 1 << " Duration: ";
         cin >> ride_duration;
-        cout << "Ride" << i+1 << " Fare :";
+        cout << "Ride " << i + 1 << " Fare: ";
         cin >> ride_fare;
 
         rides[i] = Rides(ride_name, ride_duration, ride_fare);
     }
 
-    for (int i = 0; i < numberOfVisitors; i++) {
-        string name;
-        int age;
-        double height;
+    // Input for Stalls
+    cout << "Enter number of Stalls: ";
+    cin >> numberOfStalls;
 
-        cout << "Visitor" << i+1 << " Name :";
-        cin >> name;
-        cout << "Visitor" << i+1 << " Age :";
-        cin >> age;
-        cout << "Visitor" << i+1 << " Height :";
-        cin >> height;
-
-        visitors[i] = Visitors(name, age, height);
+    if (numberOfStalls <= 0) {
+        cerr << "Invalid number of stalls. Exiting." << endl;
+        delete[] rides;
+        return 1;
     }
 
-    cout << endl;
+    Stalls* stalls = new Stalls[numberOfStalls];
 
-    cout << "Visitors" << endl;
-    for (int i = 0; i < numberOfVisitors; i++) {
-        cout << "Visitor's Name: " << visitors[i].getName() << endl;
-        cout << "Visitor's Age: " << visitors[i].getAge() << endl;
-        cout << "Visitor's Height: " << visitors[i].getHeight() << endl;
+    for (int i = 0; i < numberOfStalls; i++) {
+        string stall_name;
+        double stall_duration;
+        int stall_fare;
+
+        cout << "Stall " << i + 1 << " Name: ";
+        cin >> stall_name;
+        cout << "Stall " << i + 1 << " Duration: ";
+        cin >> stall_duration;
+        cout << "Stall " << i + 1 << " Fare: ";
+        cin >> stall_fare;
+
+        stalls[i] = Stalls(stall_name, stall_duration, stall_fare);
     }
 
-    cout << endl;
+    // Premium Ride
+    PremiumRides premiumRide("Roller Coaster", 5.0, 500, "VR Experience");
 
-    cout << "Rides " << endl;
+    // Display Rides
+    cout << "\nRides:" << endl;
     for (int i = 0; i < numberOfRides; i++) {
-        cout << "Ride name: " << rides[i].getName() << endl;
-        cout << "Ride duration: " << rides[i].getDuration() << " minutes" << endl;
+        cout << "Ride Name: " << rides[i].getName() << endl;
+        cout << "Ride Duration: " << rides[i].getDuration() << " minutes" << endl;
+        cout << "Ride Fare: " << rides[i].getFare() << " INR" << endl;
     }
 
-    print_stalls(stalls, 2);
-    cout << Visitors::getTotalVisitors()<<endl;
-    cout << Rides::getTotalRides()<<endl;
+    // Display Premium Ride
+    cout << "\nPremium Ride:" << endl;
+    cout << "Ride Name: " << premiumRide.getName() << endl;
+    cout << "Ride Duration: " << premiumRide.getDuration() << " minutes" << endl;
+    cout << "Ride Fare: " << premiumRide.getFare() << " INR" << endl;
+    cout << "Special Features: " << premiumRide.getFeatures() << endl;
 
+    // Display Stalls
+    cout << "\nStalls:" << endl;
+    for (int i = 0; i < numberOfStalls; i++) {
+        cout << "Stall Name: " << stalls[i].getName() << endl;
+        cout << "Stall Duration: " << stalls[i].getDuration() << " minutes" << endl;
+        cout << "Stall Fare: " << stalls[i].getFare() << " INR" << endl;
+    }
 
-    // Deallocate dynamic memory
+    // Display Total Rides
+    cout << "\nTotal Rides: " << Rides::getTotalRides() << endl;
+
+    // Free dynamically allocated memory
     delete[] rides;
-    delete[] visitors;
+    delete[] stalls;
 
     return 0;
 }
