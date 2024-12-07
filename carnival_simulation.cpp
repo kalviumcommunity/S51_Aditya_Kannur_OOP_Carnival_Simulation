@@ -1,9 +1,8 @@
 #include <iostream>
 #include <string>
-#include <vector>
 using namespace std;
 
-// Base Class with Constructor Overloading and Function Overloading
+// Base Class: Entertainment
 class Entertainment {
 protected:
     string name;
@@ -37,61 +36,55 @@ public:
     }
 
     // Function to display the details of the Entertainment object
-    void display() const {
+    virtual void display() const {
         cout << "Name: " << name << ", Duration: " << duration << " minutes, Fare: " << fare << " INR" << endl;
     }
 };
 
-// Abstract Display Strategy Class (for OCP)
-class IEntertainmentDisplay {
+// Derived Class 1: Rides
+class Rides : public Entertainment {
 public:
-    virtual void display(const Entertainment& e) const = 0;  // Pure virtual function for displaying entertainment
-};
+    // Constructor for Rides (inheriting from Entertainment)
+    Rides(string n = "", double d = 0.0, int f = 0) : Entertainment(n, d, f) {}
 
-// Concrete Display Class 1: Standard Display
-class EntertainmentDisplay : public IEntertainmentDisplay {
-public:
-    void display(const Entertainment& e) const override {
-        cout << "Name: " << e.getName() << ", Duration: " << e.getDuration() << " minutes, Fare: " << e.getFare() << " INR" << endl;
+    // Overriding display function
+    void display() const override {
+        cout << "Ride Name: " << name << ", Duration: " << duration << " minutes, Fare: " << fare << " INR" << endl;
     }
 };
 
-// Concrete Display Class 2: JSON Display
-class EntertainmentDisplayJSON : public IEntertainmentDisplay {
+// Derived Class 2: Stalls
+class Stalls : public Entertainment {
 public:
-    void display(const Entertainment& e) const override {
-        cout << "{\n"
-             << "  \"Name\": \"" << e.getName() << "\",\n"
-             << "  \"Duration\": " << e.getDuration() << ",\n"
-             << "  \"Fare\": " << e.getFare() << "\n"
-             << "}" << endl;
+    // Constructor for Stalls (inheriting from Entertainment)
+    Stalls(string n = "", double d = 0.0, int f = 0) : Entertainment(n, d, f) {}
+
+    // Overriding display function
+    void display() const override {
+        cout << "Stall Name: " << name << ", Duration: " << duration << " minutes, Fare: " << fare << " INR" << endl;
     }
 };
 
-// Concrete Display Class 3: CSV Display
-class EntertainmentDisplayCSV : public IEntertainmentDisplay {
-public:
-    void display(const Entertainment& e) const override {
-        cout << e.getName() << "," << e.getDuration() << "," << e.getFare() << endl;
-    }
-};
-
+// Main function demonstrating LSP (Liskov Substitution Principle)
 int main() {
-    Entertainment e1("Roller Coaster", 10.0, 300);
+    // Create an array of Entertainment pointers
+    Entertainment* entertainmentArray[3];
 
-    // Displaying using different strategies without modifying the existing EntertainmentDisplay code
-    EntertainmentDisplay standardDisplay;
-    EntertainmentDisplayJSON jsonDisplay;
-    EntertainmentDisplayCSV csvDisplay;
+    // Create objects of Rides and Stalls
+    entertainmentArray[0] = new Entertainment("Haunted House", 15.0, 200);
+    entertainmentArray[1] = new Stalls("Food Stall", 5.0, 50);
+    entertainmentArray[2] = new Rides("Ferris Wheel", 10.0, 300);
 
-    cout << "Standard Display:" << endl;
-    standardDisplay.display(e1);
+    // Use a loop to display all entertainment (this ensures LSP)
+    cout << "Displaying all entertainment:" << endl;
+    for (int i = 0; i < 3; ++i) {
+        entertainmentArray[i]->display();  // Each object calls its respective display method
+    }
 
-    cout << "\nJSON Display:" << endl;
-    jsonDisplay.display(e1);
-
-    cout << "\nCSV Display:" << endl;
-    csvDisplay.display(e1);
+    // Clean up memory
+    for (int i = 0; i < 3; ++i) {
+        delete entertainmentArray[i];
+    }
 
     return 0;
 }
