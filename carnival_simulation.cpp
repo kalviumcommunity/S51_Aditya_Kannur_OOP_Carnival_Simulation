@@ -2,89 +2,99 @@
 #include <string>
 using namespace std;
 
+// Abstract Class for Display
+class IEntertainmentDisplay {
+public:
+    virtual void display() const = 0;  // Pure virtual function for displaying details
+    virtual ~IEntertainmentDisplay() {} // Virtual destructor for proper cleanup
+};
+
 // Base Class: Entertainment
-class Entertainment {
+class Entertainment : public IEntertainmentDisplay {
 protected:
     string name;
     double duration;
     int fare;
 
 public:
-    // Default Constructor
+    // Constructors
     Entertainment() : name(""), duration(0.0), fare(0) {}
-
-    // Constructor for Name Only
     Entertainment(string n) : name(n), duration(0.0), fare(0) {}
-
-    // Constructor for Name and Duration
     Entertainment(string n, double d) : name(n), duration(d), fare(0) {}
-
-    // Constructor for Name, Duration, and Fare
     Entertainment(string n, double d, int f) : name(n), duration(d), fare(f) {}
 
-    // Getter functions
-    string getName() const {
-        return name;
+    // Virtual display function
+    virtual void display() const override {
+        cout << "Name: " << name << ", Duration: " << duration 
+             << " minutes, Fare: " << fare << " INR" << endl;
     }
 
-    double getDuration() const {
-        return duration;
-    }
-
-    int getFare() const {
-        return fare;
-    }
-
-    // Function to display the details of the Entertainment object
-    virtual void display() const {
-        cout << "Name: " << name << ", Duration: " << duration << " minutes, Fare: " << fare << " INR" << endl;
-    }
+    virtual ~Entertainment() {} // Virtual destructor
 };
 
 // Derived Class 1: Rides
 class Rides : public Entertainment {
-public:
-    // Constructor for Rides (inheriting from Entertainment)
-    Rides(string n = "", double d = 0.0, int f = 0) : Entertainment(n, d, f) {}
+private:
+    static int totalRides;
 
-    // Overriding display function
+public:
+    Rides(string n = "", double d = 0.0, int f = 0)
+        : Entertainment(n, d, f) {
+        if (f > 0) {
+            totalRides++;
+        }
+    }
+
+    static int getTotalRides() {
+        return totalRides;
+    }
+
+    // Override display function
     void display() const override {
-        cout << "Ride Name: " << name << ", Duration: " << duration << " minutes, Fare: " << fare << " INR" << endl;
+        cout << "Ride Name: " << name << ", Duration: " << duration 
+             << " minutes, Fare: " << fare << " INR" << endl;
     }
 };
+
+// Static member initialization for totalRides
+int Rides::totalRides = 0;
 
 // Derived Class 2: Stalls
 class Stalls : public Entertainment {
 public:
-    // Constructor for Stalls (inheriting from Entertainment)
-    Stalls(string n = "", double d = 0.0, int f = 0) : Entertainment(n, d, f) {}
+    Stalls(string n = "", double d = 0.0, int f = 0)
+        : Entertainment(n, d, f) {}
 
-    // Overriding display function
+    // Override display function
     void display() const override {
-        cout << "Stall Name: " << name << ", Duration: " << duration << " minutes, Fare: " << fare << " INR" << endl;
+        cout << "Stall Name: " << name << ", Duration: " << duration 
+             << " minutes, Fare: " << fare << " INR" << endl;
     }
 };
 
-// Main function demonstrating LSP (Liskov Substitution Principle)
+// Main function demonstrating abstract class and virtual function
 int main() {
-    // Create an array of Entertainment pointers
-    Entertainment* entertainmentArray[3];
+    // Array of IEntertainmentDisplay pointers
+    IEntertainmentDisplay* items[3];
 
-    // Create objects of Rides and Stalls
-    entertainmentArray[0] = new Entertainment("Haunted House", 15.0, 200);
-    entertainmentArray[1] = new Stalls("Food Stall", 5.0, 50);
-    entertainmentArray[2] = new Rides("Ferris Wheel", 10.0, 300);
+    // Storing objects of derived classes in the array
+    items[0] = new Rides("Ferris Wheel", 5.0, 300);
+    items[1] = new Stalls("Food Stall", 2.0, 50);
+    items[2] = new Entertainment("Haunted House", 15.0, 200);
 
-    // Use a loop to display all entertainment (this ensures LSP)
-    cout << "Displaying all entertainment:" << endl;
+    // Displaying details using polymorphism
+    cout << "Entertainment Details:\n";
     for (int i = 0; i < 3; ++i) {
-        entertainmentArray[i]->display();  // Each object calls its respective display method
+        items[i]->display();
     }
 
-    // Clean up memory
+    // Cleanup
     for (int i = 0; i < 3; ++i) {
-        delete entertainmentArray[i];
+        delete items[i];
     }
+
+    // Displaying total number of rides
+    cout << "\nTotal Rides: " << Rides::getTotalRides() << endl;
 
     return 0;
 }
