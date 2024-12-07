@@ -88,7 +88,7 @@ int main() {
     Entertainment e1;  // Default constructor
     Entertainment e2("Haunted House");  // Name only constructor
     Entertainment e3("Roller Coaster", 10.0, 300);  // Name, duration and fare constructor
-    Entertainment e4( 15.0, 200);  // Duration, and fare constructor
+    Entertainment e4("ferris wheel", 15.0, 200);  // Duration, and fare constructor
 
     // Displaying all the Entertainment objects using overloaded functions
     e1.display();
